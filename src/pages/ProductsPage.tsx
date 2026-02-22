@@ -1,13 +1,16 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import type { MenuItem } from "../data/menu";
+import type { Category, MenuItem } from "../data/menu";
 import { CATEGORIES, formatPrice } from "../data/menu";
+import { getUiText } from "../i18n";
+import type { LanguageCode } from "../i18n";
 import breakfastIcon from "../../assets/images/Breakfast/Morning_Boost.webp";
 import drinkIcon from "../../assets/images/Breakfast/Overnight_Oats.webp";
 import etenIcon from "../../assets/images/Lunch&Dinner/Warm_Teriyaki_Tempeh_Bowl.webp";
 import gebakIcon from "../../assets/images/Breakfast/Peanut_Butter&Cacao_Toast.webp";
 
 type ProductsPageProps = {
+  languageCode: LanguageCode;
   menuItems: MenuItem[];
   cart: Record<string, number>;
   total: number;
@@ -16,16 +19,24 @@ type ProductsPageProps = {
   onStartOver: () => void;
 };
 
-const SIDE_MENU = [
-  { label: "HAPPY DAYS", icon: breakfastIcon, category: "Ontbijt" as const },
-  { label: "KOFFIE", icon: drinkIcon, category: "Drinken" as const },
-  { label: "ETEN", icon: etenIcon, category: "Lunch & Dinner" as const },
-  { label: "GEBAK", icon: gebakIcon, category: "Handhelds" as const },
-  { label: "DRINKEN", icon: drinkIcon, category: "Drinken" as const },
-];
+const CATEGORY_ICONS: Record<Category, string> = {
+  Ontbijt: breakfastIcon,
+  "Lunch & Dinner": etenIcon,
+  Handhelds: gebakIcon,
+  Drinken: drinkIcon,
+};
 
-function ProductsPage({ menuItems, cart, total, totalItems, onAddItem, onStartOver }: ProductsPageProps) {
+function ProductsPage({
+  languageCode,
+  menuItems,
+  cart,
+  total,
+  totalItems,
+  onAddItem,
+  onStartOver,
+}: ProductsPageProps) {
   const navigate = useNavigate();
+  const text = getUiText(languageCode);
   const [selectedCategory, setSelectedCategory] = useState(CATEGORIES[0]);
 
   const filteredItems = useMemo(
@@ -39,7 +50,7 @@ function ProductsPage({ menuItems, cart, total, totalItems, onAddItem, onStartOv
         <button
           type="button"
           className="logo-pill"
-          aria-label="Terug naar start"
+          aria-label={text.products.backToStartAria}
           onClick={() => {
             onStartOver();
             navigate("/");
@@ -47,33 +58,37 @@ function ProductsPage({ menuItems, cart, total, totalItems, onAddItem, onStartOv
         >
           HH
         </button>
-        <button type="button" className="logo-pill logo-pill--tiny" aria-label="Merkicoon">
+        <button type="button" className="logo-pill logo-pill--tiny" aria-label={text.products.brandIconAria}>
           HH
         </button>
         <div className="products-header__title">
           <h1>HAPPY HERBIVORE</h1>
-          <p>Healthy menu</p>
+          <p>{text.products.healthyMenu}</p>
         </div>
       </header>
 
       <section className="products-content">
         <aside className="category-rail">
-          {SIDE_MENU.map((entry) => {
-            const isActive = selectedCategory === entry.category;
+          {CATEGORIES.map((category) => {
+            const isActive = selectedCategory === category;
             return (
               <button
-                key={`${entry.label}-${entry.category}`}
+                key={category}
                 type="button"
                 className={isActive ? "category-rail__item category-rail__item--active" : "category-rail__item"}
-                onClick={() => setSelectedCategory(entry.category)}
+                onClick={() => setSelectedCategory(category)}
               >
-                <img src={entry.icon} alt={entry.label} className="category-rail__icon" />
-                <span>{entry.label}</span>
+                <img
+                  src={CATEGORY_ICONS[category]}
+                  alt={text.products.categoryLabels[category]}
+                  className="category-rail__icon"
+                />
+                <span>{text.products.categoryLabels[category]}</span>
               </button>
             );
           })}
           <button type="button" className="category-rail__checkout" onClick={() => navigate("/pay")}>
-            CONTINU
+            {text.products.continueButton}
           </button>
         </aside>
 
@@ -84,7 +99,9 @@ function ProductsPage({ menuItems, cart, total, totalItems, onAddItem, onStartOv
               <h2>{item.name}</h2>
               <p>{item.description}</p>
               <div className="product-card__footer">
-                <strong>vanaf {formatPrice(item.price)}</strong>
+                <strong>
+                  {text.products.fromPricePrefix} {formatPrice(item.price, languageCode)}
+                </strong>
                 <button type="button" className="add-circle" onClick={() => onAddItem(item.id)}>
                   +
                 </button>
@@ -96,14 +113,14 @@ function ProductsPage({ menuItems, cart, total, totalItems, onAddItem, onStartOv
       </section>
 
       <footer className="products-footer">
-        <strong>{formatPrice(total)}</strong>
+        <strong>{formatPrice(total, languageCode)}</strong>
         <button
           type="button"
           className="btn btn--primary"
           disabled={totalItems === 0}
           onClick={() => navigate("/pay")}
         >
-          Winkelwagen
+          {text.products.cartButton}
         </button>
       </footer>
     </main>

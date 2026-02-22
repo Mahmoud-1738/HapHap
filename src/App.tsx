@@ -1,6 +1,17 @@
 import { useMemo, useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { MENU_ITEMS } from "./data/menu";
+import { DEFAULT_LANGUAGE } from "./i18n";
+import type { LanguageCode } from "./i18n";
+import {
+  addItemToCart,
+  buildCartItems,
+  createOrderNumber,
+  deleteItemFromCart,
+  getSubtotal,
+  getTotalItems,
+  removeItemFromCart,
+} from "./lib/orderUtils";
 import IdlePage from "./pages/IdlePage";
 import OrderNumberPage from "./pages/OrderNumberPage";
 import PayPage from "./pages/PayPage";
@@ -9,58 +20,32 @@ import type { Cart, CartItem, SubmittedOrder } from "./types/order";
 
 function App() {
   const [cart, setCart] = useState<Cart>({});
-  const [languageCode, setLanguageCode] = useState("nl");
+  const [languageCode, setLanguageCode] = useState<LanguageCode>(DEFAULT_LANGUAGE);
   const [lastOrder, setLastOrder] = useState<SubmittedOrder | null>(null);
 
-  const cartItems = useMemo<CartItem[]>(
-    () =>
-      MENU_ITEMS.filter((item) => cart[item.id] > 0).map((item) => ({
-        ...item,
-        quantity: cart[item.id],
-      })),
-    [cart],
-  );
+  const cartItems = useMemo<CartItem[]>(() => buildCartItems(MENU_ITEMS, cart), [cart]);
 
-  const subtotal = useMemo(
-    () => cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0),
-    [cartItems],
-  );
+  const subtotal = useMemo(() => getSubtotal(cartItems), [cartItems]);
   const total = subtotal;
-  const totalItems = useMemo(
-    () => cartItems.reduce((sum, item) => sum + item.quantity, 0),
-    [cartItems],
-  );
+  const totalItems = useMemo(() => getTotalItems(cartItems), [cartItems]);
 
   const addItem = (itemId: string) => {
-    setCart((current) => ({
-      ...current,
-      [itemId]: (current[itemId] ?? 0) + 1,
-    }));
+    setCart((current) => addItemToCart(current, itemId));
   };
 
   const removeItem = (itemId: string) => {
-    setCart((current) => {
-      const nextQuantity = (current[itemId] ?? 0) - 1;
-      if (nextQuantity <= 0) {
-        const { [itemId]: _, ...rest } = current;
-        return rest;
-      }
-      return { ...current, [itemId]: nextQuantity };
-    });
+    setCart((current) => removeItemFromCart(current, itemId));
   };
 
   const deleteItem = (itemId: string) => {
-    setCart((current) => {
-      const { [itemId]: _, ...rest } = current;
-      return rest;
-    });
+    setCart((current) => deleteItemFromCart(current, itemId));
   };
 
   const clearOrderDraft = () => {
     setCart({});
   };
 
-  const startOrder = (selectedLanguageCode: string) => {
+  const startOrder = (selectedLanguageCode: LanguageCode) => {
     setLanguageCode(selectedLanguageCode);
     clearOrderDraft();
     setLastOrder(null);
@@ -71,7 +56,7 @@ function App() {
       return null;
     }
 
-    const orderNumber = Math.floor(10 + Math.random() * 90);
+    const orderNumber = createOrderNumber();
     const submittedOrder: SubmittedOrder = {
       orderNumber,
       languageCode,
@@ -92,11 +77,12 @@ function App() {
   return (
     <div className="kiosk-app">
       <Routes>
-        <Route path="/" element={<IdlePage onStartOrder={startOrder} />} />
+        <Route path="/" element={<IdlePage languageCode={languageCode} onStartOrder={startOrder} />} />
         <Route
           path="/products"
           element={
             <ProductsPage
+              languageCode={languageCode}
               menuItems={MENU_ITEMS}
               cart={cart}
               total={total}
@@ -110,6 +96,7 @@ function App() {
           path="/pay"
           element={
             <PayPage
+              languageCode={languageCode}
               cartItems={cartItems}
               total={total}
               onAddItem={addItem}
@@ -122,7 +109,13 @@ function App() {
         />
         <Route
           path="/order-number"
-          element={<OrderNumberPage order={lastOrder} onStartNewOrder={cancelOrder} />}
+          element={
+            <OrderNumberPage
+              languageCode={languageCode}
+              order={lastOrder}
+              onStartNewOrder={cancelOrder}
+            />
+          }
         />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

@@ -1,17 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { getUiText, LANGUAGE_OPTIONS } from "../i18n";
+import type { LanguageCode } from "../i18n";
 
 type IdlePageProps = {
-  onStartOrder: (languageCode: string) => void;
+  languageCode: LanguageCode;
+  onStartOrder: (languageCode: LanguageCode) => void;
 };
-
-const LANGUAGES = [
-  { code: "nl", label: "Nederlands", flagClass: "language-flag--nl" },
-  { code: "en", label: "English", flagClass: "language-flag--us" },
-  { code: "de", label: "Deutsch", flagClass: "language-flag--de" },
-  { code: "fr", label: "Francais", flagClass: "language-flag--fr" },
-  { code: "es", label: "Espanol", flagClass: "language-flag--es" },
-];
 
 const LOGO_SLIDES = [
   new URL("../../assets/images/Lunch&Dinner/The_Supergreen_Harvest.webp", import.meta.url).href,
@@ -21,10 +16,11 @@ const LOGO_SLIDES = [
 const LOGO_ANIMATION_VIDEO =
   new URL("../../assets/Logo animation/Logo animation.mp4", import.meta.url).href;
 
-function IdlePage({ onStartOrder }: IdlePageProps) {
+function IdlePage({ languageCode, onStartOrder }: IdlePageProps) {
   const navigate = useNavigate();
   const [slideIndex, setSlideIndex] = useState(0);
   const [showAnimation, setShowAnimation] = useState(true);
+  const text = getUiText(languageCode);
 
   useEffect(() => {
     if (showAnimation) {
@@ -56,8 +52,9 @@ function IdlePage({ onStartOrder }: IdlePageProps) {
     [slideIndex],
   );
 
-  const startOrder = (languageCode: string) => {
-    onStartOrder(languageCode);
+  const startOrder = (nextLanguageCode: LanguageCode) => {
+    setShowAnimation(false);
+    onStartOrder(nextLanguageCode);
     navigate("/products");
   };
 
@@ -68,7 +65,7 @@ function IdlePage({ onStartOrder }: IdlePageProps) {
           type="button"
           className="idle-animation"
           onClick={() => setShowAnimation(false)}
-          aria-label="Sla animatie over"
+          aria-label={text.idle.skipAnimationAria}
         >
           <video
             className="idle-animation__video"
@@ -79,7 +76,7 @@ function IdlePage({ onStartOrder }: IdlePageProps) {
             onEnded={() => setShowAnimation(false)}
             onError={() => setShowAnimation(false)}
           />
-          <span className="idle-animation__skip">Tik om over te slaan</span>
+          <span className="idle-animation__skip">{text.idle.tapToSkip}</span>
         </button>
       ) : (
         <section className="language-screen__panel">
@@ -92,11 +89,11 @@ function IdlePage({ onStartOrder }: IdlePageProps) {
             ))}
           </div>
           <h1 className="idle-title">
-            <span>Kies uw taal</span>
-            <span>Choose your language</span>
+            <span>{text.idle.chooseLanguagePrimary}</span>
+            <span>{text.idle.chooseLanguageSecondary}</span>
           </h1>
           <div className="language-grid">
-            {LANGUAGES.map((language) => (
+            {LANGUAGE_OPTIONS.map((language) => (
               <button
                 key={language.code}
                 type="button"
@@ -108,7 +105,7 @@ function IdlePage({ onStartOrder }: IdlePageProps) {
               </button>
             ))}
           </div>
-          <p className="language-screen__hint">Raak het scherm aan om te beginnen</p>
+          <p className="language-screen__hint">{text.idle.touchToStart}</p>
         </section>
       )}
     </main>

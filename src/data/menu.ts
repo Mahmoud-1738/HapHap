@@ -1,3 +1,5 @@
+import { getLocaleForLanguage } from "../i18n";
+import type { LanguageCode } from "../i18n";
 import morningBoostImage from "../../assets/images/Breakfast/Morning_Boost.webp";
 import overnightOatsImage from "../../assets/images/Breakfast/Overnight_Oats.webp";
 import peanutToastImage from "../../assets/images/Breakfast/Peanut_Butter&Cacao_Toast.webp";
@@ -135,8 +137,8 @@ export const CATEGORIES: Category[] = [
   "Drinken",
 ];
 
-export function formatPrice(value: number) {
-  return new Intl.NumberFormat("nl-NL", {
+export function formatPrice(value: number, languageCode: LanguageCode = "nl") {
+  return new Intl.NumberFormat(getLocaleForLanguage(languageCode), {
     style: "currency",
     currency: "EUR",
     minimumFractionDigits: 2,

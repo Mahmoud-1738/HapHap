@@ -1,4 +1,5 @@
 import type { MenuItem } from "../data/menu";
+import type { LanguageCode } from "../i18n";
 
 export type Cart = Record<string, number>;
 
@@ -7,8 +8,8 @@ export type CartItem = MenuItem & {
 };
 
 export type SubmittedOrder = {
-  orderNumber: number;
-  languageCode: string;
+  orderNumber: string;
+  languageCode: LanguageCode;
   itemCount: number;
   total: number;
 };
