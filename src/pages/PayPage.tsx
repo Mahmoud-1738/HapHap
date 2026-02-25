@@ -1,11 +1,13 @@
 import { Navigate, useNavigate } from "react-router-dom";
 import { formatPrice } from "../data/menu";
+import type { MenuItem } from "../data/menu";
 import { getUiText } from "../i18n";
 import type { LanguageCode } from "../i18n";
 import type { CartItem } from "../types/order";
 
 type PayPageProps = {
   languageCode: LanguageCode;
+  menuItems: MenuItem[];
   cartItems: CartItem[];
   total: number;
   onAddItem: (itemId: string) => void;
@@ -17,6 +19,7 @@ type PayPageProps = {
 
 function PayPage({
   languageCode,
+  menuItems,
   cartItems,
   total,
   onAddItem,
@@ -27,6 +30,7 @@ function PayPage({
 }: PayPageProps) {
   const navigate = useNavigate();
   const text = getUiText(languageCode);
+  const quickAddItems = menuItems.filter((item) => item.isCartAddon);
 
   if (cartItems.length === 0) {
     return <Navigate to="/products" replace />;
@@ -58,6 +62,29 @@ function PayPage({
       </header>
 
       <section className="cart-list">
+        {quickAddItems.length > 0 && (
+          <section className="cart-extras" aria-label={text.pay.quickAddTitle}>
+            <h2>{text.pay.quickAddTitle}</h2>
+            <div className="cart-extras__list">
+              {quickAddItems.map((item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  className="cart-extras__item"
+                  onClick={() => onAddItem(item.id)}
+                  aria-label={text.pay.increaseAria(item.name)}
+                >
+                  <span>{item.name}</span>
+                  <strong>{formatPrice(item.price, languageCode)}</strong>
+                  <span className="cart-extras__plus" aria-hidden="true">
+                    +
+                  </span>
+                </button>
+              ))}
+            </div>
+          </section>
+        )}
+
         {cartItems.map((item) => (
           <article key={item.id} className="cart-row">
             <img src={item.image} alt={item.name} className="cart-row__image" />

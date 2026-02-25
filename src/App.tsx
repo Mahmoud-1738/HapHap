@@ -97,6 +97,7 @@ function App() {
           element={
             <PayPage
               languageCode={languageCode}
+              menuItems={MENU_ITEMS}
               cartItems={cartItems}
               total={total}
               onAddItem={addItem}

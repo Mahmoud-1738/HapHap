@@ -8,6 +8,7 @@ import breakfastIcon from "../../assets/images/Breakfast/Morning_Boost.webp";
 import drinkIcon from "../../assets/images/Breakfast/Overnight_Oats.webp";
 import etenIcon from "../../assets/images/Lunch&Dinner/Warm_Teriyaki_Tempeh_Bowl.webp";
 import gebakIcon from "../../assets/images/Breakfast/Peanut_Butter&Cacao_Toast.webp";
+import brandLogo from "../../assets/disgen/logo.webp";
 
 type ProductsPageProps = {
   languageCode: LanguageCode;
@@ -40,7 +41,7 @@ function ProductsPage({
   const [selectedCategory, setSelectedCategory] = useState(CATEGORIES[0]);
 
   const filteredItems = useMemo(
-    () => menuItems.filter((item) => item.category === selectedCategory),
+    () => menuItems.filter((item) => item.category === selectedCategory && !item.isCartAddon),
     [menuItems, selectedCategory],
   );
 
@@ -49,18 +50,21 @@ function ProductsPage({
       <header className="products-header">
         <button
           type="button"
-          className="logo-pill"
+          className="logo-pill logo-pill--back"
           aria-label={text.products.backToStartAria}
           onClick={() => {
             onStartOver();
             navigate("/");
           }}
         >
-          HH
+          <span className="logo-pill__arrow" aria-hidden="true">
+            &lt;
+          </span>
+          <span>{text.pay.back}</span>
         </button>
-        <button type="button" className="logo-pill logo-pill--tiny" aria-label={text.products.brandIconAria}>
-          HH
-        </button>
+        <span className="logo-pill logo-pill--tiny" role="img" aria-label={text.products.brandIconAria}>
+          <img src={brandLogo} alt="" className="logo-pill__image" />
+        </span>
         <div className="products-header__title">
           <h1>HAPPY HERBIVORE</h1>
           <p>{text.products.healthyMenu}</p>
@@ -98,9 +102,10 @@ function ProductsPage({
               <img src={item.image} alt={item.name} className="product-card__image" />
               <h2>{item.name}</h2>
               <p>{item.description}</p>
+              <span className="product-card__kcal">{item.kcal} kcal</span>
               <div className="product-card__footer">
                 <strong>
-                  {text.products.fromPricePrefix} {formatPrice(item.price, languageCode)}
+                  {formatPrice(item.price, languageCode)}
                 </strong>
                 <button type="button" className="add-circle" onClick={() => onAddItem(item.id)}>
                   +

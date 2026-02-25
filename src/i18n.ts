@@ -28,7 +28,6 @@ type UiText = {
     healthyMenu: string;
     continueButton: string;
     cartButton: string;
-    fromPricePrefix: string;
     backToStartAria: string;
     brandIconAria: string;
     categoryLabels: Record<"Ontbijt" | "Lunch & Dinner" | "Handhelds" | "Drinken", string>;
@@ -38,6 +37,7 @@ type UiText = {
     back: string;
     cancel: string;
     pay: string;
+    quickAddTitle: string;
     removeAria: (itemName: string) => string;
     decreaseAria: (itemName: string) => string;
     increaseAria: (itemName: string) => string;
@@ -64,7 +64,6 @@ const UI_TEXT: Record<LanguageCode, UiText> = {
       healthyMenu: "Gezond menu",
       continueButton: "DOOR",
       cartButton: "Winkelwagen",
-      fromPricePrefix: "vanaf",
       backToStartAria: "Terug naar start",
       brandIconAria: "Merkicoon",
       categoryLabels: {
@@ -79,6 +78,7 @@ const UI_TEXT: Record<LanguageCode, UiText> = {
       back: "Terug",
       cancel: "ANNULEREN",
       pay: "BETALEN",
+      quickAddTitle: "Snelle extra's",
       removeAria: (itemName) => `${itemName} verwijderen`,
       decreaseAria: (itemName) => `Eén ${itemName} minder`,
       increaseAria: (itemName) => `Eén ${itemName} extra`,
@@ -103,7 +103,6 @@ const UI_TEXT: Record<LanguageCode, UiText> = {
       healthyMenu: "Healthy menu",
       continueButton: "CONTINUE",
       cartButton: "Cart",
-      fromPricePrefix: "from",
       backToStartAria: "Back to start",
       brandIconAria: "Brand icon",
       categoryLabels: {
@@ -118,6 +117,7 @@ const UI_TEXT: Record<LanguageCode, UiText> = {
       back: "Back",
       cancel: "CANCEL",
       pay: "PAY",
+      quickAddTitle: "Quick add-ons",
       removeAria: (itemName) => `Remove ${itemName}`,
       decreaseAria: (itemName) => `Remove one ${itemName}`,
       increaseAria: (itemName) => `Add one ${itemName}`,
@@ -142,7 +142,6 @@ const UI_TEXT: Record<LanguageCode, UiText> = {
       healthyMenu: "Gesundes Menü",
       continueButton: "WEITER",
       cartButton: "Warenkorb",
-      fromPricePrefix: "ab",
       backToStartAria: "Zurück zum Start",
       brandIconAria: "Markensymbol",
       categoryLabels: {
@@ -157,6 +156,7 @@ const UI_TEXT: Record<LanguageCode, UiText> = {
       back: "Zurück",
       cancel: "ABBRECHEN",
       pay: "BEZAHLEN",
+      quickAddTitle: "Schnelle Extras",
       removeAria: (itemName) => `${itemName} entfernen`,
       decreaseAria: (itemName) => `Ein ${itemName} weniger`,
       increaseAria: (itemName) => `Ein ${itemName} mehr`,
@@ -181,7 +181,6 @@ const UI_TEXT: Record<LanguageCode, UiText> = {
       healthyMenu: "Menu sain",
       continueButton: "CONTINUER",
       cartButton: "Panier",
-      fromPricePrefix: "à partir de",
       backToStartAria: "Retour à l'accueil",
       brandIconAria: "Icône de marque",
       categoryLabels: {
@@ -196,6 +195,7 @@ const UI_TEXT: Record<LanguageCode, UiText> = {
       back: "Retour",
       cancel: "ANNULER",
       pay: "PAYER",
+      quickAddTitle: "Extras rapides",
       removeAria: (itemName) => `Supprimer ${itemName}`,
       decreaseAria: (itemName) => `Retirer un ${itemName}`,
       increaseAria: (itemName) => `Ajouter un ${itemName}`,
@@ -220,7 +220,6 @@ const UI_TEXT: Record<LanguageCode, UiText> = {
       healthyMenu: "Menú saludable",
       continueButton: "CONTINUAR",
       cartButton: "Carrito",
-      fromPricePrefix: "desde",
       backToStartAria: "Volver al inicio",
       brandIconAria: "Icono de marca",
       categoryLabels: {
@@ -235,6 +234,7 @@ const UI_TEXT: Record<LanguageCode, UiText> = {
       back: "Atrás",
       cancel: "CANCELAR",
       pay: "PAGAR",
+      quickAddTitle: "Extras rápidos",
       removeAria: (itemName) => `Quitar ${itemName}`,
       decreaseAria: (itemName) => `Quitar uno de ${itemName}`,
       increaseAria: (itemName) => `Agregar uno de ${itemName}`,
