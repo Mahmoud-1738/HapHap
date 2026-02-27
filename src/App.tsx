@@ -1,3 +1,4 @@
+
 import { useMemo, useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { MENU_ITEMS } from "./data/menu";
