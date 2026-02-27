@@ -1,19 +1,23 @@
+import ukFlagImage from "../assets/vlaggen/Uk.png";
+import spainFlagImage from "../assets/vlaggen/spain.png";
+
 export type LanguageCode = "nl" | "en" | "de" | "fr" | "es";
 
 export type LanguageOption = {
   code: LanguageCode;
   label: string;
   flagClass: string;
+  flagImage?: string;
 };
 
 export const DEFAULT_LANGUAGE: LanguageCode = "nl";
 
 export const LANGUAGE_OPTIONS: LanguageOption[] = [
   { code: "nl", label: "Nederlands", flagClass: "language-flag--nl" },
-  { code: "en", label: "English", flagClass: "language-flag--us" },
+  { code: "en", label: "English", flagClass: "language-flag--uk", flagImage: ukFlagImage },
   { code: "de", label: "Deutsch", flagClass: "language-flag--de" },
   { code: "fr", label: "Français", flagClass: "language-flag--fr" },
-  { code: "es", label: "Español", flagClass: "language-flag--es" },
+  { code: "es", label: "Español", flagClass: "language-flag--es", flagImage: spainFlagImage },
 ];
 
 type UiText = {

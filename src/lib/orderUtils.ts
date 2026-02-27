@@ -17,7 +17,7 @@ export function removeItemFromCart(cart: Cart, itemId: string): Cart {
   if (nextQuantity <= 0) {
     const nextCart = { ...cart };
     delete nextCart[itemId];
-    return nextCart;
+    return nextCart; 
   }
 
   return {
