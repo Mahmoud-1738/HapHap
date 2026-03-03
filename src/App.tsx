@@ -15,7 +15,9 @@ import {
 import IdlePage from "./pages/IdlePage";
 import OrderNumberPage from "./pages/OrderNumberPage";
 import PayPage from "./pages/PayPage";
+
 import ProductsPage from "./pages/ProductsPage";
+import ProductDetailRoute from "./pages/ProductDetailRoute";
 import type { Cart, CartItem, SubmittedOrder } from "./types/order";
 
 function App() {
@@ -108,6 +110,7 @@ function App() {
             />
           }
         />
+        <Route path="/products/:productId" element={<ProductDetailRoute onAddItem={addItem} />} />
         <Route
           path="/order-number"
           element={
