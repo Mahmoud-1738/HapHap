@@ -30,6 +30,7 @@ const PRODUCTS_PRELOAD_IMAGES = Array.from(
 function IdlePage({ languageCode, onStartOrder }: IdlePageProps) {
   const navigate = useNavigate();
   const [slideIndex, setSlideIndex] = useState(0);
+  const [previousSlideIndex, setPreviousSlideIndex] = useState<number | null>(null);
   const [showAnimation, setShowAnimation] = useState(true);
   const [isStarting, setIsStarting] = useState(false);
   const startTimeoutRef = useRef<number | null>(null);
@@ -43,10 +44,25 @@ function IdlePage({ languageCode, onStartOrder }: IdlePageProps) {
     }
 
     const timer = window.setInterval(() => {
-      setSlideIndex((current) => (current + 1) % LOGO_SLIDES.length);
+      setSlideIndex((current) => {
+        setPreviousSlideIndex(current);
+        return (current + 1) % LOGO_SLIDES.length;
+      });
     }, 2600);
     return () => window.clearInterval(timer);
   }, [showAnimation]);
+
+  useEffect(() => {
+    if (previousSlideIndex === null) {
+      return;
+    }
+
+    const timer = window.setTimeout(() => {
+      setPreviousSlideIndex(null);
+    }, 700);
+
+    return () => window.clearTimeout(timer);
+  }, [previousSlideIndex]);
 
   useEffect(() => {
     if (showAnimation || isStarting) {
@@ -111,6 +127,15 @@ function IdlePage({ languageCode, onStartOrder }: IdlePageProps) {
     }),
     [slideIndex],
   );
+  const previousBackgroundStyle = useMemo(
+    () =>
+      previousSlideIndex === null
+        ? null
+        : {
+            backgroundImage: `linear-gradient(#0000004d, #0000004d), url(${LOGO_SLIDES[previousSlideIndex]})`,
+          },
+    [previousSlideIndex],
+  );
 
   const startOrder = (nextLanguageCode: LanguageCode) => {
     if (isStarting) {
@@ -126,7 +151,11 @@ function IdlePage({ languageCode, onStartOrder }: IdlePageProps) {
   };
 
   return (
-    <main className="language-screen" style={backgroundStyle}>
+    <main className="language-screen">
+      <div className="language-screen__bg language-screen__bg--current" style={backgroundStyle} />
+      {previousBackgroundStyle ? (
+        <div className="language-screen__bg language-screen__bg--previous" style={previousBackgroundStyle} />
+      ) : null}
       {showAnimation ? (
         <button
           type="button"

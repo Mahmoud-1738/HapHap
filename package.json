@@ -8,7 +8,10 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test": "tsc -p tsconfig.test.json && node --test .tmp-tests/tests/*.test.js"
+    "test": "tsc -p tsconfig.test.json && node --test .tmp-tests/tests/*.test.js",
+    "kiosk:start": ".\\scripts\\start-kiosk.cmd",
+    "kiosk:install-autostart": "powershell -ExecutionPolicy Bypass -File .\\scripts\\install-autostart.ps1",
+    "kiosk:remove-autostart": "powershell -ExecutionPolicy Bypass -File .\\scripts\\remove-autostart.ps1"
   },
   "dependencies": {
     "react": "^19.2.0",

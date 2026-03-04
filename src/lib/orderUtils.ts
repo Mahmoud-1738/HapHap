@@ -4,6 +4,7 @@ type CartProduct = {
 };
 
 export type Cart = Record<string, number>;
+let nextOrderNumber = 0;
 
 export function addItemToCart(cart: Cart, itemId: string): Cart {
   return {
@@ -50,10 +51,12 @@ export function getTotalItems<T extends { quantity: number }>(cartItems: T[]): n
   return cartItems.reduce((sum, item) => sum + item.quantity, 0);
 }
 
-export function createOrderNumber(random = Math.random, timestamp = Date.now()): string {
-  const randomPart = Math.floor(random() * 10_000)
-    .toString()
-    .padStart(4, "0");
-  const timePart = (timestamp % 10_000).toString().padStart(4, "0");
-  return `${timePart}${randomPart}`;
+export function createOrderNumber(): string {
+  const orderNumber = nextOrderNumber;
+  nextOrderNumber += 1;
+  return orderNumber.toString();
+}
+
+export function resetOrderNumberCounter(value = 0): void {
+  nextOrderNumber = Math.max(0, Math.floor(value));
 }

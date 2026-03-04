@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { formatPrice } from "../data/menu";
 import type { MenuItem } from "../data/menu";
@@ -14,7 +15,7 @@ type PayPageProps = {
   onRemoveItem: (itemId: string) => void;
   onDeleteItem: (itemId: string) => void;
   onCancelOrder: () => void;
-  onPlaceOrder: () => string | null;
+  onPlaceOrder: () => Promise<string | null>;
 };
 
 function PayPage({
@@ -29,6 +30,7 @@ function PayPage({
   onPlaceOrder,
 }: PayPageProps) {
   const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const text = getUiText(languageCode);
   const quickAddItems = menuItems.filter((item) => item.isCartAddon);
 
@@ -36,10 +38,19 @@ function PayPage({
     return <Navigate to="/products" replace />;
   }
 
-  const payOrder = () => {
-    const orderNumber = onPlaceOrder();
-    if (orderNumber !== null) {
-      navigate("/order-number");
+  const payOrder = async () => {
+    if (isSubmitting) {
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const orderNumber = await onPlaceOrder();
+      if (orderNumber !== null) {
+        navigate("/order-number", { state: { orderNumber } });
+      }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -127,7 +138,7 @@ function PayPage({
         <button type="button" className="cancel-btn" onClick={cancelOrder}>
           x {text.pay.cancel}
         </button>
-        <button type="button" className="pay-btn" onClick={payOrder}>
+        <button type="button" className="pay-btn" onClick={() => void payOrder()} disabled={isSubmitting}>
           {text.pay.pay} {formatPrice(total, languageCode)}
         </button>
       </footer>
