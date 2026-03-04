@@ -8,6 +8,7 @@ import {
   deleteItemFromCart,
   getSubtotal,
   getTotalItems,
+  resetOrderNumberCounter,
   removeItemFromCart,
 } from "../src/lib/orderUtils.js";
 
@@ -49,9 +50,10 @@ test("buildCartItems and cart totals only include selected menu items", () => {
   assert.equal(getTotalItems(cartItems), 3);
 });
 
-test("createOrderNumber returns an 8-digit string and supports deterministic inputs", () => {
-  const orderNumber = createOrderNumber(() => 0.4321, 1_735_300_987_654);
+test("createOrderNumber starts at 0 and increments by 1", () => {
+  resetOrderNumberCounter(0);
 
-  assert.equal(orderNumber, "76544321");
-  assert.equal(orderNumber.length, 8);
+  assert.equal(createOrderNumber(), "0");
+  assert.equal(createOrderNumber(), "1");
+  assert.equal(createOrderNumber(), "2");
 });

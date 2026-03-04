@@ -5,9 +5,11 @@ import { CATEGORIES, formatPrice } from "../data/menu";
 import { getUiText } from "../i18n";
 import type { LanguageCode } from "../i18n";
 import breakfastIcon from "../../assets/images/Breakfast/Morning_Boost.webp";
-import drinkIcon from "../../assets/images/Breakfast/Overnight_Oats.webp";
-import etenIcon from "../../assets/images/Lunch&Dinner/Warm_Teriyaki_Tempeh_Bowl.webp";
-import gebakIcon from "../../assets/images/Breakfast/Peanut_Butter&Cacao_Toast.webp";
+import lunchDinnerIcon from "../../assets/images/Lunch&Dinner/Warm_Teriyaki_Tempeh_Bowl.webp";
+import handheldsIcon from "../../assets/images/Handhelds/Avocado&Halloumi_Toastie.webp";
+import sidesIcon from "../../assets/images/Sides&Small Plates/Zucchini_Fries.webp";
+import dipsIcon from "../../assets/images/Signature Dips/Classic_Hummus.webp";
+import drinksIcon from "../../assets/images/Drinks/Green_Glow_Smoothie.webp";
 import brandLogo from "../../assets/disgen/logo.webp";
 
 type ProductsPageProps = {
@@ -21,10 +23,12 @@ type ProductsPageProps = {
 };
 
 const CATEGORY_ICONS: Record<Category, string> = {
-  Ontbijt: breakfastIcon,
-  "Lunch & Dinner": etenIcon,
-  Handhelds: gebakIcon,
-  Drinken: drinkIcon,
+  Breakfast: breakfastIcon,
+  "Lunch&Dinner": lunchDinnerIcon,
+  Handhelds: handheldsIcon,
+  "Sides&Small Plates": sidesIcon,
+  "Signature Dips": dipsIcon,
+  Drinks: drinksIcon,
 };
 
 function ProductsPage({
@@ -41,7 +45,12 @@ function ProductsPage({
   const [selectedCategory, setSelectedCategory] = useState(CATEGORIES[0]);
 
   const filteredItems = useMemo(
-    () => menuItems.filter((item) => item.category === selectedCategory && !item.isCartAddon),
+    () =>
+      menuItems.filter(
+        (item) =>
+          item.category === selectedCategory &&
+          (!item.isCartAddon || selectedCategory === "Signature Dips"),
+      ),
     [menuItems, selectedCategory],
   );
 

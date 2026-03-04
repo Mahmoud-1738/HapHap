@@ -1,19 +1,23 @@
+import ukFlagImage from "../assets/vlaggen/Uk.png";
+import spainFlagImage from "../assets/vlaggen/spain.png";
+
 export type LanguageCode = "nl" | "en" | "de" | "fr" | "es";
 
 export type LanguageOption = {
   code: LanguageCode;
   label: string;
   flagClass: string;
+  flagImage?: string;
 };
 
 export const DEFAULT_LANGUAGE: LanguageCode = "nl";
 
 export const LANGUAGE_OPTIONS: LanguageOption[] = [
   { code: "nl", label: "Nederlands", flagClass: "language-flag--nl" },
-  { code: "en", label: "English", flagClass: "language-flag--us" },
+  { code: "en", label: "English", flagClass: "language-flag--uk", flagImage: ukFlagImage },
   { code: "de", label: "Deutsch", flagClass: "language-flag--de" },
-  { code: "fr", label: "Français", flagClass: "language-flag--fr" },
-  { code: "es", label: "Español", flagClass: "language-flag--es" },
+  { code: "fr", label: "Francais", flagClass: "language-flag--fr" },
+  { code: "es", label: "Espanol", flagClass: "language-flag--es", flagImage: spainFlagImage },
 ];
 
 type UiText = {
@@ -30,7 +34,10 @@ type UiText = {
     cartButton: string;
     backToStartAria: string;
     brandIconAria: string;
-    categoryLabels: Record<"Ontbijt" | "Lunch & Dinner" | "Handhelds" | "Drinken", string>;
+    categoryLabels: Record<
+      "Breakfast" | "Lunch&Dinner" | "Handhelds" | "Sides&Small Plates" | "Signature Dips" | "Drinks",
+      string
+    >;
   };
   pay: {
     title: string;
@@ -48,6 +55,13 @@ type UiText = {
     preparing: string;
     returnToStartIn: string;
     seconds: string;
+    printReceipt: string;
+    receiptTitle: string;
+    receiptDateLabel: string;
+    receiptOrderLabel: string;
+    receiptItemsLabel: string;
+    receiptTotalLabel: string;
+    receiptQtyShort: string;
   };
 };
 
@@ -67,10 +81,12 @@ const UI_TEXT: Record<LanguageCode, UiText> = {
       backToStartAria: "Terug naar start",
       brandIconAria: "Merkicoon",
       categoryLabels: {
-        Ontbijt: "ONTBIJT",
-        "Lunch & Dinner": "LUNCH",
+        Breakfast: "ONTBIJT",
+        "Lunch&Dinner": "LUNCH",
         Handhelds: "HANDHELDS",
-        Drinken: "DRINKEN",
+        "Sides&Small Plates": "SIDES",
+        "Signature Dips": "DIPS",
+        Drinks: "DRINKEN",
       },
     },
     pay: {
@@ -80,8 +96,8 @@ const UI_TEXT: Record<LanguageCode, UiText> = {
       pay: "BETALEN",
       quickAddTitle: "Snelle extra's",
       removeAria: (itemName) => `${itemName} verwijderen`,
-      decreaseAria: (itemName) => `Eén ${itemName} minder`,
-      increaseAria: (itemName) => `Eén ${itemName} extra`,
+      decreaseAria: (itemName) => `Een ${itemName} minder`,
+      increaseAria: (itemName) => `Een ${itemName} extra`,
     },
     order: {
       thankYou: "BEDANKT VOOR UW BESTELLING!",
@@ -89,6 +105,13 @@ const UI_TEXT: Record<LanguageCode, UiText> = {
       preparing: "Uw bestelling wordt nu bereid",
       returnToStartIn: "Terugkeren naar startscherm in",
       seconds: "seconden",
+      printReceipt: "BON PRINTEN",
+      receiptTitle: "KASSABON",
+      receiptDateLabel: "Datum",
+      receiptOrderLabel: "Ordernummer",
+      receiptItemsLabel: "Items",
+      receiptTotalLabel: "Totaal",
+      receiptQtyShort: "aantal",
     },
   },
   en: {
@@ -106,10 +129,12 @@ const UI_TEXT: Record<LanguageCode, UiText> = {
       backToStartAria: "Back to start",
       brandIconAria: "Brand icon",
       categoryLabels: {
-        Ontbijt: "BREAKFAST",
-        "Lunch & Dinner": "LUNCH",
+        Breakfast: "BREAKFAST",
+        "Lunch&Dinner": "LUNCH",
         Handhelds: "HANDHELDS",
-        Drinken: "DRINKS",
+        "Sides&Small Plates": "SIDES",
+        "Signature Dips": "DIPS",
+        Drinks: "DRINKS",
       },
     },
     pay: {
@@ -128,32 +153,41 @@ const UI_TEXT: Record<LanguageCode, UiText> = {
       preparing: "Your order is being prepared",
       returnToStartIn: "Returning to start screen in",
       seconds: "seconds",
+      printReceipt: "PRINT RECEIPT",
+      receiptTitle: "RECEIPT",
+      receiptDateLabel: "Date",
+      receiptOrderLabel: "Order number",
+      receiptItemsLabel: "Items",
+      receiptTotalLabel: "Total",
+      receiptQtyShort: "qty",
     },
   },
   de: {
     idle: {
-      chooseLanguagePrimary: "Sprache wählen",
+      chooseLanguagePrimary: "Sprache waehlen",
       chooseLanguageSecondary: "Choose your language",
-      touchToStart: "Bildschirm berühren, um zu starten",
-      tapToSkip: "Tippen zum Überspringen",
-      skipAnimationAria: "Animation überspringen",
+      touchToStart: "Bildschirm beruehren, um zu starten",
+      tapToSkip: "Tippen zum Ueberspringen",
+      skipAnimationAria: "Animation ueberspringen",
     },
     products: {
-      healthyMenu: "Gesundes Menü",
+      healthyMenu: "Gesundes Menue",
       continueButton: "WEITER",
       cartButton: "Warenkorb",
-      backToStartAria: "Zurück zum Start",
+      backToStartAria: "Zurueck zum Start",
       brandIconAria: "Markensymbol",
       categoryLabels: {
-        Ontbijt: "FRÜHSTÜCK",
-        "Lunch & Dinner": "MITTAG",
+        Breakfast: "FRUEHSTUECK",
+        "Lunch&Dinner": "MITTAG",
         Handhelds: "HANDHELDS",
-        Drinken: "GETRÄNKE",
+        "Sides&Small Plates": "BEILAGEN",
+        "Signature Dips": "DIPS",
+        Drinks: "GETRAENKE",
       },
     },
     pay: {
       title: "IHR WARENKORB",
-      back: "Zurück",
+      back: "Zurueck",
       cancel: "ABBRECHEN",
       pay: "BEZAHLEN",
       quickAddTitle: "Schnelle Extras",
@@ -162,18 +196,25 @@ const UI_TEXT: Record<LanguageCode, UiText> = {
       increaseAria: (itemName) => `Ein ${itemName} mehr`,
     },
     order: {
-      thankYou: "DANKE FÜR IHRE BESTELLUNG!",
+      thankYou: "DANKE FUER IHRE BESTELLUNG!",
       orderNumberLabel: "IHRE BESTELLNUMMER",
       preparing: "Ihre Bestellung wird zubereitet",
-      returnToStartIn: "Zurück zum Startbildschirm in",
+      returnToStartIn: "Zurueck zum Startbildschirm in",
       seconds: "Sekunden",
+      printReceipt: "BON DRUCKEN",
+      receiptTitle: "BELEG",
+      receiptDateLabel: "Datum",
+      receiptOrderLabel: "Bestellnummer",
+      receiptItemsLabel: "Artikel",
+      receiptTotalLabel: "Gesamt",
+      receiptQtyShort: "Anz.",
     },
   },
   fr: {
     idle: {
       chooseLanguagePrimary: "Choisissez votre langue",
       chooseLanguageSecondary: "Choose your language",
-      touchToStart: "Touchez l'écran pour commencer",
+      touchToStart: "Touchez l'ecran pour commencer",
       tapToSkip: "Touchez pour passer",
       skipAnimationAria: "Passer l'animation",
     },
@@ -181,13 +222,15 @@ const UI_TEXT: Record<LanguageCode, UiText> = {
       healthyMenu: "Menu sain",
       continueButton: "CONTINUER",
       cartButton: "Panier",
-      backToStartAria: "Retour à l'accueil",
-      brandIconAria: "Icône de marque",
+      backToStartAria: "Retour a l'accueil",
+      brandIconAria: "Icone de marque",
       categoryLabels: {
-        Ontbijt: "PETIT DÉJ.",
-        "Lunch & Dinner": "DÉJEUNER",
+        Breakfast: "PETIT DEJ.",
+        "Lunch&Dinner": "DEJEUNER",
         Handhelds: "SNACKS",
-        Drinken: "BOISSONS",
+        "Sides&Small Plates": "ACCOMP.",
+        "Signature Dips": "DIPS",
+        Drinks: "BOISSONS",
       },
     },
     pay: {
@@ -202,10 +245,17 @@ const UI_TEXT: Record<LanguageCode, UiText> = {
     },
     order: {
       thankYou: "MERCI POUR VOTRE COMMANDE !",
-      orderNumberLabel: "VOTRE NUMÉRO DE COMMANDE",
-      preparing: "Votre commande est en préparation",
-      returnToStartIn: "Retour à l'écran d'accueil dans",
+      orderNumberLabel: "VOTRE NUMERO DE COMMANDE",
+      preparing: "Votre commande est en preparation",
+      returnToStartIn: "Retour a l'ecran d'accueil dans",
       seconds: "secondes",
+      printReceipt: "IMPRIMER LE TICKET",
+      receiptTitle: "TICKET",
+      receiptDateLabel: "Date",
+      receiptOrderLabel: "Numero de commande",
+      receiptItemsLabel: "Articles",
+      receiptTotalLabel: "Total",
+      receiptQtyShort: "qte",
     },
   },
   es: {
@@ -214,37 +264,46 @@ const UI_TEXT: Record<LanguageCode, UiText> = {
       chooseLanguageSecondary: "Choose your language",
       touchToStart: "Toca la pantalla para empezar",
       tapToSkip: "Toca para omitir",
-      skipAnimationAria: "Omitir animación",
+      skipAnimationAria: "Omitir animacion",
     },
     products: {
-      healthyMenu: "Menú saludable",
+      healthyMenu: "Menu saludable",
       continueButton: "CONTINUAR",
       cartButton: "Carrito",
       backToStartAria: "Volver al inicio",
       brandIconAria: "Icono de marca",
       categoryLabels: {
-        Ontbijt: "DESAYUNO",
-        "Lunch & Dinner": "ALMUERZO",
+        Breakfast: "DESAYUNO",
+        "Lunch&Dinner": "ALMUERZO",
         Handhelds: "SNACKS",
-        Drinken: "BEBIDAS",
+        "Sides&Small Plates": "SIDES",
+        "Signature Dips": "DIPS",
+        Drinks: "BEBIDAS",
       },
     },
     pay: {
       title: "TU CARRITO",
-      back: "Atrás",
+      back: "Atras",
       cancel: "CANCELAR",
       pay: "PAGAR",
-      quickAddTitle: "Extras rápidos",
+      quickAddTitle: "Extras rapidos",
       removeAria: (itemName) => `Quitar ${itemName}`,
       decreaseAria: (itemName) => `Quitar uno de ${itemName}`,
       increaseAria: (itemName) => `Agregar uno de ${itemName}`,
     },
     order: {
-      thankYou: "¡GRACIAS POR TU PEDIDO!",
-      orderNumberLabel: "TU NÚMERO DE PEDIDO",
-      preparing: "Tu pedido se está preparando",
+      thankYou: "GRACIAS POR TU PEDIDO!",
+      orderNumberLabel: "TU NUMERO DE PEDIDO",
+      preparing: "Tu pedido se esta preparando",
       returnToStartIn: "Volviendo a la pantalla inicial en",
       seconds: "segundos",
+      printReceipt: "IMPRIMIR TICKET",
+      receiptTitle: "TICKET",
+      receiptDateLabel: "Fecha",
+      receiptOrderLabel: "Numero de pedido",
+      receiptItemsLabel: "Articulos",
+      receiptTotalLabel: "Total",
+      receiptQtyShort: "cant.",
     },
   },
 };

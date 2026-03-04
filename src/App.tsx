@@ -1,3 +1,4 @@
+
 import { useMemo, useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { MENU_ITEMS } from "./data/menu";
@@ -12,6 +13,7 @@ import {
   getTotalItems,
   removeItemFromCart,
 } from "./lib/orderUtils";
+import { persistOrderToDatabase } from "./lib/ordersApi";
 import IdlePage from "./pages/IdlePage";
 import OrderNumberPage from "./pages/OrderNumberPage";
 import PayPage from "./pages/PayPage";
@@ -51,7 +53,7 @@ function App() {
     setLastOrder(null);
   };
 
-  const placeOrder = () => {
+  const placeOrder = async () => {
     if (totalItems === 0) {
       return null;
     }
@@ -62,10 +64,28 @@ function App() {
       languageCode,
       itemCount: totalItems,
       total,
+      createdAt: new Date().toISOString(),
+      items: cartItems.map((item) => ({
+        id: item.id,
+        name: item.name,
+        quantity: item.quantity,
+        unitPrice: item.price,
+        lineTotal: item.price * item.quantity,
+      })),
     };
 
+    const savedInDatabase = await persistOrderToDatabase({
+      orderNumber,
+      total,
+      items: cartItems,
+    });
+
+    if (!savedInDatabase) {
+      window.alert("Kon bestelling niet opslaan in database. Controleer API/DB verbinding.");
+      return null;
+    }
+
     setLastOrder(submittedOrder);
-    clearOrderDraft();
     return orderNumber;
   };
 
