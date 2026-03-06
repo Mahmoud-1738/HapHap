@@ -8,6 +8,7 @@ import drinkIcon from "../../assets/images/Breakfast/Overnight_Oats.webp";
 import etenIcon from "../../assets/images/Lunch&Dinner/Warm_Teriyaki_Tempeh_Bowl.webp";
 import gebakIcon from "../../assets/images/Breakfast/Peanut_Butter&Cacao_Toast.webp";
 import brandLogo from "../../assets/disgen/logo.webp";
+import haphapLogo from "../../assets/images/logo/haphap.png";
 
 type IdlePageProps = {
   languageCode: LanguageCode;
@@ -189,6 +190,9 @@ function IdlePage({ languageCode, onStartOrder }: IdlePageProps) {
             ))}
           </div>
           <div className="language-screen__center-action">
+            <img src={haphapLogo} alt="Happy Herbivore" className="idle-logo" />
+            <span className="idle-brand-name">HAPPY HERBIVORE</span>
+            <span className="idle-brand-tagline">{text.products.healthyMenu}</span>
             <button
               type="button"
               className="start-continue-btn"
@@ -197,7 +201,7 @@ function IdlePage({ languageCode, onStartOrder }: IdlePageProps) {
               disabled={isStarting}
               onClick={() => startOrder(DEFAULT_LANGUAGE)}
             >
-              DOOR
+              {text.idle.touchToStart}
             </button>
           </div>
           <div className="language-grid" role="group" aria-label={text.idle.chooseLanguagePrimary}>

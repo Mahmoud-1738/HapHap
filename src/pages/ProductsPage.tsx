@@ -12,6 +12,7 @@ import sidesIcon from "../../assets/images/Sides&Small Plates/Zucchini_Fries.web
 import dipsIcon from "../../assets/images/Signature Dips/Classic_Hummus.webp";
 import drinksIcon from "../../assets/images/Drinks/Green_Glow_Smoothie.webp";
 import brandLogo from "../../assets/disgen/logo.webp";
+import haphapLogo from "../../assets/images/logo/haphap.png";
 
 type ProductsPageProps = {
   languageCode: LanguageCode;
@@ -79,8 +80,8 @@ function ProductsPage({
           <span className="logo-pill__arrow" aria-hidden="true">&lt;</span>
           <span>{text.pay.back}</span>
         </button>
-        <span className="logo-pill logo-pill--tiny" role="img" aria-label={text.products.brandIconAria}>
-          <img src={brandLogo} alt="" className="logo-pill__image" />
+        <span className="logo-pill logo-pill--brand" role="img" aria-label={text.products.brandIconAria}>
+          <img src={haphapLogo} alt="" className="logo-pill__image" />
         </span>
         <div className="products-header__title">
           <h1>HAPPY HERBIVORE</h1>
