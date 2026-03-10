@@ -5,6 +5,7 @@ import type { MenuItem } from "../data/menu";
 import { getUiText } from "../i18n";
 import type { LanguageCode } from "../i18n";
 import type { CartItem } from "../types/order";
+import haphapLogo from "../../assets/images/logo/haphap.png";
 
 type PayPageProps = {
   languageCode: LanguageCode;
@@ -68,7 +69,10 @@ function PayPage({
           </span>
           <span>{text.pay.back}</span>
         </button>
-        <h1>{text.pay.title}</h1>
+        <div className="cart-screen__header-brand">
+          <img src={haphapLogo} alt="" className="cart-screen__logo" />
+          <h1>{text.pay.title}</h1>
+        </div>
         <strong>{formatPrice(total, languageCode)}</strong>
       </header>
 

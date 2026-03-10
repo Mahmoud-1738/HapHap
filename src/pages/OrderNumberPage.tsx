@@ -4,6 +4,7 @@ import { formatPrice } from "../data/menu";
 import { getLocaleForLanguage, getUiText } from "../i18n";
 import type { LanguageCode } from "../i18n";
 import type { SubmittedOrder } from "../types/order";
+import haphapLogo from "../../assets/images/logo/haphap.png";
 
 type OrderNumberPageProps = {
   languageCode: LanguageCode;
@@ -76,6 +77,7 @@ function OrderNumberPage({ languageCode, order, onStartNewOrder }: OrderNumberPa
 
   return (
     <main className="thankyou-screen">
+      <img src={haphapLogo} alt="Happy Herbivore" className="thankyou-screen__logo" />
       <div className="thankyou-screen__icon" aria-hidden="true">
         <svg viewBox="0 0 64 64" className="thankyou-screen__icon-svg">
           <circle cx="32" cy="32" r="22" />

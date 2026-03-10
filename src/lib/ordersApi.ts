@@ -12,12 +12,22 @@ type ApiOrderLine = {
   unitPrice: number;
 };
 
-const APP_ROUTE_SEGMENTS = new Set(["", "products", "pay", "order-number"]);
+let lastOrderApiError = "Onbekende fout.";
 
-function getAppBasePath(pathname: string): string {
+const APP_ROUTE_SEGMENTS = new Set(["products", "pay", "order-number"]);
+
+function getAppRootPath(pathname: string): string {
   const segments = pathname.split("/").filter(Boolean);
 
+  if (segments.length > 0 && segments[segments.length - 1].includes(".")) {
+    segments.pop();
+  }
+
   if (segments.length > 0 && APP_ROUTE_SEGMENTS.has(segments[segments.length - 1])) {
+    segments.pop();
+  }
+
+  if (segments.length > 0 && segments[segments.length - 1] === "dist") {
     segments.pop();
   }
 
@@ -30,8 +40,8 @@ function getOrderApiUrl(): string {
     return configuredApiUrl.trim();
   }
 
-  const basePath = getAppBasePath(window.location.pathname);
-  return `${basePath}/api/place-order.php`;
+  const appRoot = getAppRootPath(window.location.pathname);
+  return `${appRoot}/api/place-order.php`;
 }
 
 function toOrderLines(items: CartItem[]): ApiOrderLine[] {
@@ -51,28 +61,51 @@ function toOrderLines(items: CartItem[]): ApiOrderLine[] {
   });
 }
 
+export function getLastOrderApiError(): string {
+  return lastOrderApiError;
+}
+
 export async function persistOrderToDatabase(payload: PersistOrderPayload): Promise<boolean> {
+  lastOrderApiError = "Onbekende fout.";
   const orderLines = toOrderLines(payload.items);
   if (orderLines.length === 0) {
+    lastOrderApiError = "Geen geldige productregels in winkelmand.";
+    console.error("Order payload contained no valid product ids.");
     return false;
   }
 
-  const response = await fetch(getOrderApiUrl(), {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      orderNumber: payload.orderNumber,
-      total: payload.total,
-      items: orderLines,
-    }),
-  });
+  try {
+    const response = await fetch(getOrderApiUrl(), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        orderNumber: payload.orderNumber,
+        total: payload.total,
+        items: orderLines,
+      }),
+    });
 
-  if (!response.ok) {
+    if (!response.ok) {
+      const errorText = await response.text();
+      lastOrderApiError = `HTTP ${response.status}: ${errorText || "Lege response"}`;
+      console.error("Order API request failed.", response.status, errorText);
+      return false;
+    }
+
+    const result = (await response.json()) as { ok?: boolean; error?: string; details?: string } | null;
+    if (result?.ok !== true) {
+      lastOrderApiError = result?.details || result?.error || "API gaf geen succes terug.";
+      console.error("Order API responded with failure.", result);
+      return false;
+    }
+
+    return true;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    lastOrderApiError = `Netwerkfout: ${message}`;
+    console.error("Order API network/parsing error.", error);
     return false;
   }
-
-  const result = (await response.json()) as { ok?: boolean } | null;
-  return result?.ok === true;
 }

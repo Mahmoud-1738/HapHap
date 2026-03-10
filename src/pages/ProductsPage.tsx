@@ -11,7 +11,7 @@ import handheldsIcon from "../../assets/images/Handhelds/Avocado&Halloumi_Toasti
 import sidesIcon from "../../assets/images/Sides&Small Plates/Zucchini_Fries.webp";
 import dipsIcon from "../../assets/images/Signature Dips/Classic_Hummus.webp";
 import drinksIcon from "../../assets/images/Drinks/Green_Glow_Smoothie.webp";
-import brandLogo from "../../assets/disgen/logo.webp";
+import haphapLogo from "../../assets/images/logo/haphap.png";
 
 type ProductsPageProps = {
   languageCode: LanguageCode;
@@ -79,8 +79,8 @@ function ProductsPage({
           <span className="logo-pill__arrow" aria-hidden="true">&lt;</span>
           <span>{text.pay.back}</span>
         </button>
-        <span className="logo-pill logo-pill--tiny" role="img" aria-label={text.products.brandIconAria}>
-          <img src={brandLogo} alt="" className="logo-pill__image" />
+        <span className="logo-pill logo-pill--brand" role="img" aria-label={text.products.brandIconAria}>
+          <img src={haphapLogo} alt="" className="logo-pill__image" />
         </span>
         <div className="products-header__title">
           <h1>HAPPY HERBIVORE</h1>
@@ -158,15 +158,7 @@ function ProductsPage({
           price={modalProduct.price}
           calories={modalProduct.kcal}
           description={modalProduct.description}
-          nutrition={{
-            calories: modalProduct.kcal,
-            protein: (modalProduct as any).protein ?? 0,
-            carbs: (modalProduct as any).carbs ?? 0,
-            fat: (modalProduct as any).fat ?? 0,
-            fiber: (modalProduct as any).fiber ?? 0,
-            sugar: (modalProduct as any).sugar ?? 0,
-          }}
-          allergens={(modalProduct as any).allergens || []}
+          allergens={[]}
           onAddToCart={() => {
             onAddItem(modalProduct.id);
             handleCloseModal();
