@@ -13,7 +13,7 @@ import {
   getTotalItems,
   removeItemFromCart,
 } from "./lib/orderUtils";
-import { persistOrderToDatabase } from "./lib/ordersApi";
+import { getLastOrderApiError, persistOrderToDatabase } from "./lib/ordersApi";
 import IdlePage from "./pages/IdlePage";
 import OrderNumberPage from "./pages/OrderNumberPage";
 import PayPage from "./pages/PayPage";
@@ -83,7 +83,8 @@ function App() {
     });
 
     if (!savedInDatabase) {
-      window.alert("Kon bestelling niet opslaan in database. Controleer API/DB verbinding.");
+      const errorMessage = getLastOrderApiError();
+      window.alert(`Kon bestelling niet opslaan in database.\n${errorMessage}`);
       return null;
     }
 

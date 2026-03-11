@@ -11,7 +11,10 @@ import handheldsIcon from "../../assets/images/Handhelds/Avocado&Halloumi_Toasti
 import sidesIcon from "../../assets/images/Sides&Small Plates/Zucchini_Fries.webp";
 import dipsIcon from "../../assets/images/Signature Dips/Classic_Hummus.webp";
 import drinksIcon from "../../assets/images/Drinks/Green_Glow_Smoothie.webp";
+<<<<<<< HEAD
+=======
 import brandLogo from "../../assets/disgen/logo.webp";
+>>>>>>> 492bb9cd82d9ea3f4c8179ca3b98947239fcd4be
 import haphapLogo from "../../assets/images/logo/haphap.png";
 
 type ProductsPageProps = {
@@ -159,15 +162,7 @@ function ProductsPage({
           price={modalProduct.price}
           calories={modalProduct.kcal}
           description={modalProduct.description}
-          nutrition={{
-            calories: modalProduct.kcal,
-            protein: (modalProduct as any).protein ?? 0,
-            carbs: (modalProduct as any).carbs ?? 0,
-            fat: (modalProduct as any).fat ?? 0,
-            fiber: (modalProduct as any).fiber ?? 0,
-            sugar: (modalProduct as any).sugar ?? 0,
-          }}
-          allergens={(modalProduct as any).allergens || []}
+          allergens={[]}
           onAddToCart={() => {
             onAddItem(modalProduct.id);
             handleCloseModal();

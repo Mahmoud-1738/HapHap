@@ -1,22 +1,12 @@
 import React from 'react';
 import './ProductDetailPage.css';
 
-interface Nutrition {
-  calories: number;
-  protein: number;
-  carbs: number;
-  fat: number;
-  fiber: number;
-  sugar: number;
-}
-
 interface ProductDetailProps {
   image: string;
   name: string;
   price: number;
   calories: number;
   description: string;
-  nutrition: Nutrition;
   allergens: string[];
   onAddToCart: () => void;
   onRequestClose?: () => void;
@@ -28,7 +18,6 @@ const ProductDetailPage: React.FC<ProductDetailProps> = ({
   price,
   calories,
   description,
-  nutrition,
   allergens,
   onAddToCart,
   onRequestClose,

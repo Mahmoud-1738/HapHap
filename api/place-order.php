@@ -3,6 +3,10 @@
 declare(strict_types=1);
 
 header("Content-Type: application/json; charset=utf-8");
+$allowedOrigin = getenv("KIOSK_ALLOWED_ORIGIN") ?: "*";
+header("Access-Control-Allow-Origin: " . $allowedOrigin);
+header("Access-Control-Allow-Methods: POST, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type");
 
 if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
     http_response_code(204);
@@ -34,11 +38,45 @@ if ($orderNumber === "" || $total < 0 || !is_array($items) || count($items) === 
     exit;
 }
 
-$dbHost = getenv("KIOSK_DB_HOST") ?: "localhost";
-$dbUser = getenv("KIOSK_DB_USER") ?: "u240407_kiosk";
-$dbPass = getenv("KIOSK_DB_PASSWORD") ?: "Mahmoud@";
-$dbName = getenv("KIOSK_DB_NAME") ?: "u240407_kiosk";
-$dbPort = (int)(getenv("KIOSK_DB_PORT") ?: 3306);
+$dbHost = "localhost";
+$dbUser = "u240407_kiosk";
+$dbPass = "DhW26khFM8rF3LaSgFBe";
+$dbName = "u240407_kiosk";
+$dbPort = 3306;
+
+if (getenv("KIOSK_DB_USE_ENV") === "1") {
+    $envHost = getenv("KIOSK_DB_HOST");
+    if (is_string($envHost) && trim($envHost) !== "") {
+        $dbHost = trim($envHost);
+    }
+
+    $envUser = getenv("KIOSK_DB_USERNAME");
+    if (!is_string($envUser) || trim($envUser) === "") {
+        $envUser = getenv("KIOSK_DB_USER");
+    }
+    if (is_string($envUser) && trim($envUser) !== "") {
+        $dbUser = trim($envUser);
+    }
+
+    $envPass = getenv("KIOSK_DB_PASSWORD");
+    if (is_string($envPass) && $envPass !== "") {
+        $dbPass = $envPass;
+    }
+
+    $envName = getenv("KIOSK_DB_NAME");
+    if (is_string($envName) && trim($envName) !== "") {
+        $dbName = trim($envName);
+    }
+
+    $envPort = getenv("KIOSK_DB_PORT");
+    if (is_string($envPort) && trim($envPort) !== "") {
+        $dbPort = (int)$envPort;
+    }
+}
+
+if (strtolower($dbHost) === "lochalhost") {
+    $dbHost = "localhost";
+}
 
 $pickupNumber = (int)$orderNumber;
 if ($pickupNumber < 0) {

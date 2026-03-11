@@ -1,5 +1,6 @@
 :root {
   --design-ratio: 0.6206349206;
+  --ui-scale: 1.15;
   --ink-900: #10363f;
   --ink-700: #2f5660;
   --ink-500: #5f7a82;
@@ -44,13 +45,15 @@ body {
 }
 
 .kiosk-app {
-  width: min(100vw, calc(100vh * var(--design-ratio)));
-  height: min(100vh, calc(100vw / var(--design-ratio)));
+  width: calc(min(100vw, calc(100vh * var(--design-ratio))) / var(--ui-scale));
+  height: calc(min(100vh, calc(100vw / var(--design-ratio))) / var(--ui-scale));
   overflow: hidden;
   border-radius: 0;
   border: 1px solid #b8c9d1;
   box-shadow: var(--shadow-strong);
   background: #f7fbfd;
+  transform: scale(var(--ui-scale));
+  transform-origin: center center;
 }
 
 h1,
@@ -1292,6 +1295,7 @@ input:focus-visible {
     box-shadow: none;
     background: #fff;
     overflow: visible;
+    transform: none;
   }
 
   .thankyou-screen {
