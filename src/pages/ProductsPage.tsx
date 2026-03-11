@@ -11,6 +11,10 @@ import handheldsIcon from "../../assets/images/Handhelds/Avocado&Halloumi_Toasti
 import sidesIcon from "../../assets/images/Sides&Small Plates/Zucchini_Fries.webp";
 import dipsIcon from "../../assets/images/Signature Dips/Classic_Hummus.webp";
 import drinksIcon from "../../assets/images/Drinks/Green_Glow_Smoothie.webp";
+<<<<<<< HEAD
+=======
+import brandLogo from "../../assets/disgen/logo.webp";
+>>>>>>> 492bb9cd82d9ea3f4c8179ca3b98947239fcd4be
 import haphapLogo from "../../assets/images/logo/haphap.png";
 
 type ProductsPageProps = {
